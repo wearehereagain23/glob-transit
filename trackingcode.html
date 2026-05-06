@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- ========== Meta Tags ========== -->
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="modinatheme">
+    <!-- ======== Page title ============ -->
+    <title>Glob-Transit - Transport </title>
+    <!-- ========== Favicon Icon ========== -->
+    <link rel="shortcut icon" href="assets/img/favicon.png">
+    <!-- ===========  All Stylesheet ================= -->
+    <!--  Icon css plugins -->
+    <link rel="stylesheet" href="assets/css/icons.css">
+    <!--  animate css plugins -->
+    <link rel="stylesheet" href="assets/css/animate.css">
+    <!--  slick css plugins -->
+    <link rel="stylesheet" href="assets/css/slick.css">
+    <!--  magnific-popup css plugins -->
+    <link rel="stylesheet" href="assets/css/magnific-popup.css">
+    <!-- metis menu css file -->
+    <link rel="stylesheet" href="assets/css/metismenu.css">
+    <!--  Bootstrap css plugins -->
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <!--  main style css file -->
+    <link rel="stylesheet" href="assets/css/style.css">
+    <!-- template main style css file -->
+    <link rel="stylesheet" href="style.css">
+
+
+    <!-- POPUP SCRIPT -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="sweetalert2.min.js"></script>
+    <link rel="stylesheet" href="sweetalert2.min.css">
+    <script src="./config.js"></script>
+    <script type="module">
+
+        function showSpinnerModal() {
+            document.getElementById('spinnerModal').style.display = 'flex';
+        }
+
+        function hideSpinnerModal() {
+            document.getElementById('spinnerModal').style.display = 'none';
+        }
+
+
+        import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+        const supabase = createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_KEY);
+
+
+
+        let formDAT = document.getElementById('tfm');
+        formDAT.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const formData = new FormData(formDAT);
+            let trackid = (formData.get('trackid'));
+
+            async function fetchData() {
+                showSpinnerModal();
+                const { data, error } = await supabase
+                    .from('glob_transit')
+                    .select('*')
+                    .eq('trackingcode', trackid);
+                if (error) {
+                    alert('network error')
+                } else {
+                    hideSpinnerModal()
+                    if (data.length == 0) {
+                        Swal.fire({
+                            title: 'ERROR',
+                            text: "Invalid tracking number!",
+                            icon: 'error',
+                            showCancelButton: false,
+                            allowOutsideClick: false,
+                            allowEscapeKey: false,
+                            confirmButtonText: 'OK!'
+                        })
+                    } else {
+                        data.forEach(doc => {
+                            if (doc.trackingStatus == 'active') {
+                                window.location.href = `../trackingpage/index.html?i=${doc.trackingcode}`
+                            } else {
+                                Swal.fire({
+                                    title: 'ERROR',
+                                    text: `${doc.disableMessage}`,
+                                    icon: 'error',
+                                    showCancelButton: false,
+                                    allowOutsideClick: false,
+                                    allowEscapeKey: false,
+                                    confirmButtonText: 'OK!'
+                                })
+                            }
+
+
+                        });
+                    }
+                }
+            } fetchData();
+
+        });
+        //  window.location.href = `../trackingpage/index.html?i=${docSnap.data().trackingcode}&url=${docSnap.data().mapurl}`
+    </script>
+
+
+</head>
+
+<body class="body-wrapper">
+
+
+    <!-- preloader -->
+    <div id="preloader" class="preloader">
+        <div class="animation-preloader">
+            <div class="spinner">
+            </div>
+            <div class="txt-loading">
+
+            </div>
+            <p class="text-center">Loading</p>
+        </div>
+        <div class="loader">
+            <div class="row">
+                <div class="col-3 loader-section section-left">
+                    <div class="bg"></div>
+                </div>
+                <div class="col-3 loader-section section-left">
+                    <div class="bg"></div>
+                </div>
+                <div class="col-3 loader-section section-right">
+                    <div class="bg"></div>
+                </div>
+                <div class="col-3 loader-section section-right">
+                    <div class="bg"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="top-bar-wrapper d-none d-sm-block">
+        <div class="container d-flex justify-content-between align-items-center">
+            <div class="top-left">
+                <a href="mailto:globtransit@assistin.online"><i
+                        class="fal fa-envelope"></i>globtransit@assistin.online</a>
+                <a href="404.html#"><i class="fal fa-map-marker-alt"></i>Cargo Hub, LD 32614, UK</a>
+            </div>
+            <div class="top-right d-none d-md-block">
+                <div class="social-pages">
+                    <a href="404.html#"><i class="fab fa-facebook-f" aria-hidden="true"></i></a>
+                    <a href="404.html#"><i class="fab fa-twitter" aria-hidden="true"></i></a>
+                    <a href="404.html#"><i class="fab fa-linkedin-in" aria-hidden="true"></i></a>
+                    <a href="404.html#"><i class="fab fa-youtube" aria-hidden="true"></i></a>
+                    <a href="404.html#"><i class="fab fa-skype" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <header class="header-wrap header-3">
+        <div class="top-header">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12 col-12 text-center">
+                        <div class="welcome-text">
+                            <p>Welcome to Glob-Transit Logistic & Cargo Services Company. <a href="faq.html">Setting &
+                                    Parivacy, Faq</a></p>
+                        </div>
+                        <div id="google_translate_element"> </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="middle-header-wrapper">
+            <div class="container-fluid">
+                <div class="row align-items-center justify-content-between">
+                    <div class="col-xl-2 col-lg-4 col-6 align-items-center d-flex">
+                        <div class="mobile-nav-bar me-3">
+                            <div class="mobile-nav-wrap">
+                                <div id="hamburger">
+                                    <i class="fal fa-bars"></i>
+                                </div>
+                                <!-- mobile menu - responsive menu  -->
+                                <div class="mobile-nav">
+                                    <button type="button" class="close-nav">
+                                        <i class="fal fa-times-circle"></i>
+                                    </button>
+                                    <nav class="sidebar-nav">
+                                        <ul class="metismenu" id="mobile-menu">
+                                            <li><a href="index.html">Homes</a>
+                                            </li>
+                                            <li><a href="about.html">About</a></li>
+                                            <li><a href="services.html">Services</a></li>
+
+                                            <li>
+                                                <a href="faq.html">Faq</a>
+
+                                            </li>
+
+                                            <li><a href="contact.html">Contact</a></li>
+                                        </ul>
+                                    </nav>
+
+                                    <div class="action-bar text-white">
+                                        <div class="single-info-element">
+                                            <div class="icon">
+                                                <i class="fal fa-map-marked-alt"></i>
+                                            </div>
+                                            <div class="text">
+                                                <h5>visit our location:</h5>
+                                                <span>West Jakarta City, UK</span>
+                                            </div>
+                                        </div>
+                                        <div class="single-info-element">
+                                            <div class="icon">
+                                                <i class="fal fa-clock"></i>
+                                            </div>
+                                            <div class="text">
+                                                <h5>Opening Hours:</h5>
+                                                <span>Mon-Fri 8am-5pm</span>
+                                            </div>
+                                        </div>
+                                        <div class="single-info-element">
+                                            <div class="icon">
+                                                <i class="fal fa-envelope"></i>
+                                            </div>
+                                            <div class="text">
+                                                <h5>Send us mail</h5>
+                                                <span>globtransit@assistin.online</span>
+                                            </div>
+                                        </div>
+                                        <div class="call-us">
+
+                                        </div>
+                                        <a href="trackingcode.html" class="theme-btn mt-4">Track Shipment</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="overlay"></div>
+                        </div>
+
+                        <div class="header-logo">
+                            <div class="logo">
+                                <a href="index.html">
+                                    <img src="assets/img/logo.png" alt="logo">
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-8 p-lg-0 header-menu-wrap">
+                        <div class="header-menu-wrap">
+                            <div class="menu-top-bar">
+                                <div class="contact-info-grid">
+                                    <div class="single-menu-box">
+                                        <div class="icon">
+                                            <i class="fal fa-envelope-open"></i>
+                                        </div>
+                                        <div class="content">
+                                            <h3>Email Us</h3>
+                                            <span>globtransit@assistin.online</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="single-menu-box">
+                                        <div class="icon">
+                                            <i class="fal fa-clock"></i>
+                                        </div>
+                                        <div class="content">
+                                            <h3>Opening Hour</h3>
+                                            <span>08:00 am - 05:00 pm</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="side-toggle-menu">
+                                    <i class="fal fa-bars"></i>
+                                </div>
+                            </div>
+
+                            <div class="main-menu-wrapper d-flex justify-content-center">
+                                <div class="main-menu">
+                                    <ul>
+                                        <li><a href="index.html">Home </a>
+
+                                        </li>
+                                        <li><a href="about.html">About</a> </li>
+                                        <li><a href="services.html">Services</a></li>
+
+                                        <li><a href="faq.html">Faq </a>
+
+                                        </li>
+
+                                        <li><a href="contact.html">Contact</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-2 col-lg-3 col-6 ps-lg-0 text-end">
+                        <div class="header-btn-cta">
+                            <a href="trackingcode.html" class="theme-btn">Track Shipment <i
+                                    class="ms-2 fal fa-long-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="page-banner-wrap text-center bg-cover" style="background-image: url('assets/img/page-banner.jpg')">
+        <div class="container">
+            <div class="page-heading text-white">
+                <h1>Shipment Tracking</h1>
+            </div>
+        </div>
+    </div>
+    <div class="breadcrumb-wrapper">
+        <div class="container">
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Shipment Tracking</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <section class="error-404-wrapper section-padding">
+        <div class="container">
+            <div class="row">
+
+
+
+                <div class="col-12 text-center">
+                    <div class="error-content">
+                        <form id="tfm" role="search" class="search-form"><input required="" type="text" id="trackid"
+                                class="search-field" placeholder="Enter tracking number" name="trackid">
+                            <br>
+                            <input class="theme-btn mt-30" type="submit" value="Search →">
+
+                        </form>
+
+                        <style>
+                            .search-field {
+                                padding: 1%;
+                                width: 20%;
+                                border-radius: 2px;
+                                border: 1px solid rgb(141, 141, 141);
+                            }
+
+                            @media screen and (max-width:992px) {
+                                .search-field {
+                                    width: 70%;
+                                    padding: 2%;
+                                }
+                            }
+                        </style>
+
+
+                        <!-- SPINNER DIV -->
+                        <div id="spinnerModal" class="spinner-modal" style="display: none;">
+                            <div class="spinner-content">
+                                <div class="spinner"></div>
+                                <p>Loading, please wait...</p>
+                            </div>
+                        </div>
+                        <!-- SPINNER DIV -->
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer-1 footer-wrap">
+        <div class="footer-widgets-wrapper theme-bg">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-6 col-xl-3">
+                        <div class="about-Glob-Transit pe-md-5 pe-xl-0">
+                            <a href="index.html">
+                                <img src="assets/img/footer-logo.png" alt="Glob-Transit">
+                            </a>
+                            <p>Glob-Transit Services is a global supplier of transport and logistics
+                                solutions. We have offices in more than 20 countries and agents.</p>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-xl-2">
+                        <div class="single-footer-wid ps-xl-4">
+                            <div class="wid-title">
+                                <h6>Our Divisions</h6>
+                            </div>
+                            <ul>
+                                <li><a href="about.html">What We Do</a></li>
+                                <li><a href="contact.html">Request a Freight</a></li>
+                                <li><a href="trackingcode.html">Track & Trace</a></li>
+                                <li><a href="services.html">Rail Freight</a></li>
+                                <li><a href="services.html">Maritime Transport</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-xl-2">
+                        <div class="single-footer-wid ps-xl-2">
+                            <div class="wid-title">
+                                <h6>Our Services</h6>
+                            </div>
+                            <ul>
+                                <li><a href="about.html#">What We Do</a></li>
+                                <li><a href="services.html#">Request a Freight</a></li>
+                                <li><a href="trackingcode.html#">Track & Trace</a></li>
+                                <li><a href="services.html#">Rail Freight</a></li>
+                                <li><a href="services.html#">Maritime Transport</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-xl-2">
+                        <div class="single-footer-wid">
+                            <div class="wid-title">
+                                <h6>Industry Sectors</h6>
+                            </div>
+                            <ul>
+                                <li><a href="about.html#">Electronics Industry</a></li>
+                                <li><a href="about.html#">Manufacturing</a></li>
+                                <li><a href="about.html#">Semicon & Solar</a></li>
+                                <li><a href="about.html#">Oil & Gas Cargo</a></li>
+                                <li><a href="about.html#">Energy & Chemicals</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-xl-3">
+                        <div class="single-footer-wid site-info-widget">
+                            <div class="wid-title">
+                                <h6>Get In Touch</h6>
+                            </div>
+                            <div class="get-in-touch">
+                                <div class="single-contact-info">
+                                    <div class="icon id1">
+                                        <i class="fal fa-map-marker-alt"></i>
+                                    </div>
+                                    <div class="contact-info">
+                                        <span>94 Roa Malaka, West Jakarta City, UK</span>
+                                    </div>
+                                </div>
+                                <!-- <div class="single-contact-info">
+                                    <div class="icon id2">
+                                        <i class="fal fa-phone"></i>
+                                    </div>
+                                   
+                                </div> -->
+                                <div class="single-contact-info">
+                                    <div class="icon id3">
+                                        <i class="fal fa-envelope"></i>
+                                    </div>
+                                    <div class="contact-info">
+                                        <span>globtransit@assistin.online</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="newsletter_widget">
+                                <div class="newsletter_box">
+                                    <form action="index.html#">
+                                        <input type="email" placeholder="Enter email address" required>
+                                        <button class="submit-btn" type="submit"><i
+                                                class="fas fa-envelope-open"></i></button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div class="container align-items-center">
+                <div class="bottom-content-wrapper">
+                    <div class="row">
+                        <div class="col-md-6 col-12">
+                            <div class="copy-rights">
+                                <p>&copy;2025 <strong>Glob-Transit</strong>, All Rights Reserved</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mt-2 mt-md-0 col-12 text-md-end">
+                            <div class="social-links">
+                                <a><i class="fab fa-facebook-f"></i></a>
+                                <a><i class="fab fa-twitter"></i></a>
+                                <a><i class="fab fa-instagram"></i></a>
+                                <a><i class="fab fa-youtube"></i></a>
+                                <a><i class="fab fa-linkedin"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!--  ALl JS Plugins
+    ====================================== -->
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/modernizr.min.js"></script>
+    <script src="assets/js/jquery.easing.js"></script>
+    <script src="assets/js/popper.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+    <script src="assets/js/isotope.pkgd.min.js"></script>
+    <script src="assets/js/imageload.min.js"></script>
+    <script src="assets/js/scrollUp.min.js"></script>
+    <script src="assets/js/slick.min.js"></script>
+    <script src="assets/js/slick-animation.min.js"></script>
+    <script src="assets/js/magnific-popup.min.js"></script>
+    <script src="assets/js/wow.min.js"></script>
+    <script src="assets/js/metismenu.js"></script>
+    <script src="assets/js/active.js"></script>
+
+
+    <script>
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'en'
+            }, 'google_translate_element');
+        }
+
+    </script>
+
+    <script src="//code.jivosite.com/widget/wZjuHBTiBF" async></script>
+
+
+
+    <script type="text/javascript"
+        src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    </div>
+
+
+
+    <style>
+        #google_translate_element {
+            color: transparent;
+        }
+
+        #google_translate_element a {
+            display: none;
+        }
+
+        .goog-te-banner-frame.skiptranslate {
+            display: none !important;
+        }
+
+        body>.skiptranslate {
+            display: none;
+        }
+    </style>
+
+
+    <!-- SPINNER CSS -->
+    <style>
+        .spinner-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.938);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        .spinner-content {
+            text-align: center;
+            color: white;
+        }
+
+        .spinner {
+            border: 6px solid #f3f3f3;
+            border-top: 6px solid #ffffff;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+
+</body>
+
+</html>
